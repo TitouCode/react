@@ -1,0 +1,4 @@
+//ignore nodes_modules
+node_modules/*
+//ignore compiled files
+bin/*
