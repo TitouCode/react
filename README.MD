@@ -29,7 +29,7 @@ npm build (build)
 
 WARNING:
 Compilation avec React + React-Template fail!!
-En attendant la patch
+En attendant le patch on bidouille
 
 aller dans node_modules/invariant  --> copier invariant.js dans node_modules/react/lib/
 aller dans node_modules/warning  --> copier warning.js dans node_modules/react/lib/

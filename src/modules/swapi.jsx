@@ -24,6 +24,8 @@ var ItemBox = React.createClass({
 		return {data: [], pages: {prev:null,next:null}};
 	},
 	componentDidMount: function() {
+		//re-init array after page change else it kepts values
+		this.oldState = [];
 		this.loadDatas();
 	},
 	loadDatas: function(datasToLoad){
@@ -34,13 +36,33 @@ var ItemBox = React.createClass({
 		  success: function(data) {
 		  	//keep only result and pages
 		  	this.oldState.push(data.results);
-		  	let navs = {less:data.previous,more:data.next};
+		  	let more = null,
+		  		less = null;
+
+		  	if(data.next != null) {
+		  		more = this.cleanUrlForAjax(data.next);	
+		  	}
+		  	if(data.previous != null){
+		  		less = this.cleanUrlForAjax(data.previous);	
+		  	}
+
+		  	let navs = {less:less,more:more};
 		    this.setState({data: this.oldState, pages: navs});
 		  }.bind(this),
 		  error: function(xhr, status, err) {
 		    console.error(this.props.url, status, err.toString());
 		  }.bind(this)
 		});
+	},
+	cleanUrlForAjax: function(oldUrl){
+		var tmpUrl = oldUrl;
+	  	tmpUrl = tmpUrl.split('?');
+
+	  	let tmpUrlStart = tmpUrl[0],
+	  		tmpEnd = tmpUrl[1].split('&'),
+	  		tmpUrlEnd = tmpEnd[0].indexOf('_=') == 0 ? tmpEnd[1] : tmpEnd[0], 
+	  		url = tmpUrlStart +'?'+ tmpUrlEnd;
+	  	return url;
 	},
 	handleClick: function(e){
 		var dataPage = $(e.currentTarget).attr("data-page"),
